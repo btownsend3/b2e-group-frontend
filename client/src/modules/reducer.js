@@ -2,6 +2,7 @@ const USER_URL = "http://localhost:8080"
 const QUIZ_URL = "http://localhost:8081"
 
 const initialState = {
+    currentQuiz: {},
     userList: [],
     quizList: [],
     token: null,
@@ -56,18 +57,20 @@ export function logout() {
     }
 }
 
-export function createAccount() {
+export function createAccount(username, password, role) {
     return async (dispatch, getState) => {
+        let user = { username, password, role }
         try {
             let res = await fetch(`${USER_URL}/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                body: JSON.stringify(user)
             })
-
+            dispatch({type: "CREATE"})
         } catch (e) {
-            dispatch({type: "FAILED", payload: "Failed to create acccount"})
+            dispatch({type: "FAILED", payload: "Failed to create account"})
         }
     }
 }
@@ -75,6 +78,18 @@ export function createAccount() {
 export default function reducer(state = initialState, action) {
     state.errorMessage = null
     switch(action.type) {
+        case "LOGIN":
+            return { ...state, token: action.payload }
+        case "LOGOUT":
+            return { ...state, token: null }
+        case "CREATE":
+            return state
+        case "GET_QUIZZES":
+            return { ...state, quizList: action.payload }
+        case "GET_USERS":
+            return { ...state, userList: action.payload }
+        case "START_QUIZ":
+            return { ...state, currentQuiz: state.quizList[action.payload] }
         default:
             return state
     }
