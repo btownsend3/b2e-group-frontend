@@ -3,13 +3,15 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import {useDispatch, useSelector} from "react-redux"
-import {logout} from "../modules/reducer";
-import CreateAccount from "./CreateAccount";
-import Login from "./Login";
+import {logout} from "../modules/reducer"
+import CreateAccount from "./CreateAccount"
+import Login from "./Login"
 
 function NavigationBar() {
     const dispatch = useDispatch()
     const permissionLevel = useSelector(state => state.permissionLevel)
+    const stage = useSelector(state => state.stage)
+    const token = useSelector(state => state.token)
 
     return (
         <Navbar bg="light" expand="lg">

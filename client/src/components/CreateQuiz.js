@@ -1,7 +1,9 @@
 import {useState} from 'react'
-import {Form} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap"
+import {useDispatch} from "react-redux"
 
 function CreateQuiz() {
+    const dispatch = useDispatch()
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
@@ -13,9 +15,10 @@ function CreateQuiz() {
                 </Form.Label>
             </Form.Group><Form.Group>
                 <Form.Label className={'w-100'}>
-                    <Form.Control value={title} onChange={(e) => setTitle(prev => e.target.value)} />
+                    <Form.Control value={title} onChange={(e) => setDescription(prev => e.target.value)} />
                 </Form.Label>
             </Form.Group>
+            <Button variant={"primary"} onClick={() => dispatch({type: "NEXT_STAGE"})}>Next</Button>
         </Form>
     )
 

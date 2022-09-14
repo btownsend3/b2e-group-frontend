@@ -1,3 +1,5 @@
+import {loginHelper} from "./utils";
+
 const USER_URL = "http://localhost:8080"
 const QUIZ_URL = "http://localhost:8081"
 
@@ -101,7 +103,7 @@ export default function reducer(state = initialState, action) {
     state.loginMessage = null
     switch(action.type) {
         case "LOGIN":
-            return { ...state, token: action.payload, loginMessage: "You are now logged in" }
+            return loginHelper(state, action)
         case "LOGOUT":
             return { ...state, token: null }
         case "CREATE":
@@ -114,6 +116,11 @@ export default function reducer(state = initialState, action) {
             return { ...state, currentQuiz: state.quizList[action.payload], stage: 1 }
         case "FAILED":
             return { ...state, errorMessage: action.payload }
+        case "NEXT_STAGE":
+            return {
+                ...state,
+                stage: state.stage + 1
+            }
         default:
             return state
     }
