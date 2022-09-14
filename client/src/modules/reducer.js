@@ -6,6 +6,7 @@ const initialState = {
     userList: [],
     quizList: [],
     token: null,
+    stage: null,
     permissionLevel: 0, // 0: not logged in / 1: applicant / 2: recruiter / 3: admin
     errorMessage: null
 }
@@ -61,13 +62,11 @@ export function createAccount(username, password, role) {
     return async (dispatch, getState) => {
         let user = { username, password, role }
         try {
-            let res = await fetch(`${USER_URL}/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(user)
-            })
+            if (role != "applicant") {
+                let res = await fetch(`${USER_URL}/admin-create?token=${getState().token}&username=${username}&password=${password}&role=${role}`)
+            } else {
+                let res = await fetch(`${USER_URL}/create?username=${username}&password=${password}`)
+            }
             dispatch({type: "CREATE"})
         } catch (e) {
             dispatch({type: "FAILED", payload: "Failed to create account"})
@@ -89,7 +88,7 @@ export default function reducer(state = initialState, action) {
         case "GET_USERS":
             return { ...state, userList: action.payload }
         case "START_QUIZ":
-            return { ...state, currentQuiz: state.quizList[action.payload] }
+            return { ...state, currentQuiz: state.quizList[action.payload], stage: 1 }
         default:
             return state
     }
