@@ -8,7 +8,8 @@ const initialState = {
     token: null,
     stage: null,
     permissionLevel: 0, // 0: not logged in / 1: applicant / 2: recruiter / 3: admin
-    errorMessage: null
+    errorMessage: null,
+    loginMessage: null
 }
 
 export function getUsers() {
@@ -16,7 +17,11 @@ export function getUsers() {
         try {
             let res = await fetch(`${USER_URL}/get-users`)
             let data = await res.json()
-            dispatch({type: "GET_USERS", payload: data})
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to fetch users"})
+            } else {
+                dispatch({type: "GET_USERS", payload: data})
+            }
         } catch (e) {
            dispatch({type: "FAILED", payload: "Failed to fetch users"})
         }
@@ -28,7 +33,11 @@ export function getQuizzes() {
         try {
             let res = await fetch(`${QUIZ_URL}/get-quizzes`)
             let data = await res.json()
-            dispatch({type: "GET_QUIZZES", payload: data})
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to fetch quizzes"})
+            } else {
+                dispatch({type: "GET_QUIZZES", payload: data})
+            }
         } catch (e) {
            dispatch({type: "FAILED", payload: "Failed to fetch quizzes"})
         }
@@ -40,7 +49,11 @@ export function login(username, password) {
         try {
             let res = await fetch(`${USER_URL}/login?username=${username}&password=${password}`)
             let data = await res.json()
-            dispatch({type: "LOGIN", payload: data})
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to log in with provided username and password"})
+            } else {
+                dispatch({type: "LOGIN", payload: data})
+            }
         } catch (e) {
            dispatch({type: "FAILED", payload: "Failed to log in"})
         }
@@ -51,7 +64,11 @@ export function logout() {
     return async (dispatch, getState) => {
         try {
             let res = await fetch(`${USER_URL}/token=${getState().token}`)
-            dispatch({type: "LOGOUT"})
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to log out"})
+            } else {
+                dispatch({type: "LOGOUT"})
+            }
         } catch (e) {
             dispatch({type: "FAILED", payload: "Failed to log out"})
         }
@@ -62,12 +79,17 @@ export function createAccount(username, password, role) {
     return async (dispatch, getState) => {
         let user = { username, password, role }
         try {
+            let res
             if (role != "applicant") {
-                let res = await fetch(`${USER_URL}/admin-create?token=${getState().token}&username=${username}&password=${password}&role=${role}`)
+                res = await fetch(`${USER_URL}/admin-create?token=${getState().token}&username=${username}&password=${password}&role=${role}`)
             } else {
-                let res = await fetch(`${USER_URL}/create?username=${username}&password=${password}`)
+                res = await fetch(`${USER_URL}/create?username=${username}&password=${password}`)
             }
-            dispatch({type: "CREATE"})
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to create account"})
+            } else {
+                dispatch({type: "CREATE"})
+            }
         } catch (e) {
             dispatch({type: "FAILED", payload: "Failed to create account"})
         }
@@ -76,9 +98,10 @@ export function createAccount(username, password, role) {
 
 export default function reducer(state = initialState, action) {
     state.errorMessage = null
+    state.loginMessage = null
     switch(action.type) {
         case "LOGIN":
-            return { ...state, token: action.payload }
+            return { ...state, token: action.payload, loginMessage: "You are now logged in" }
         case "LOGOUT":
             return { ...state, token: null }
         case "CREATE":
@@ -89,6 +112,8 @@ export default function reducer(state = initialState, action) {
             return { ...state, userList: action.payload }
         case "START_QUIZ":
             return { ...state, currentQuiz: state.quizList[action.payload], stage: 1 }
+        case "FAILED":
+            return { ...state, errorMessage: action.payload }
         default:
             return state
     }

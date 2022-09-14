@@ -53,7 +53,7 @@ function CreateAccount() {
                             </Form.Label>
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label className={"w-100"}>
+                            <Form.Label className={"w-100"}>Password
                                 <Form.Control type={'password'} onChange={(e) => setPassword(prev => e.target.value)} />
                             </Form.Label>
                         </Form.Group>

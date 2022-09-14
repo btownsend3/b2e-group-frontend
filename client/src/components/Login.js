@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {Button, Modal, Form} from "react-bootstrap"
 import {login} from "../modules/reducer"
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 
 function Login() {
     const dispatch = useDispatch()
@@ -9,13 +9,17 @@ function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
+    const loginMessage = useSelector(state => state.loginMessage)
+    const errorMessage = useSelector(state => state.errorMessage)
 
     function handleClose() {
         setMessage(prev => "")
         setUsername(prev => "")
         setPassword(prev => "")
         setShow(false)
+        dispatch({type: "CLEAR_MESSAGE"})
     }
+
     const handleShow = () => setShow(true)
 
     function handleLogin() {
@@ -24,7 +28,7 @@ function Login() {
             setMessage(prev => "Please enter your username")
             return
         } else if (!password) {
-            setMessage(prev => "Please enter your username")
+            setMessage(prev => "Please enter your password")
             return
         }
         dispatch(login(username, password))
@@ -52,6 +56,9 @@ function Login() {
                                 <Form.Control type={'password'} onChange={(e) => setPassword(prev => e.target.value)} />
                             </Form.Label>
                         </Form.Group>
+                        { message && <p className={"text-danger"}>{message}</p>}
+                        { loginMessage && <p>{loginMessage}</p> }
+                        { errorMessage && <p className={"text-danger"}>{errorMessage}</p> }
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
