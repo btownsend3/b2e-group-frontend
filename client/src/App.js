@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import CreateQuiz from "./components/CreateQuiz";
 import CreateQuestion from "./components/CreateQuestion";
 import {Button} from "react-bootstrap";
+import QuizList from "./components/QuizList";
 
 function App() {
     const dispatch = useDispatch()
@@ -17,6 +18,7 @@ function App() {
         { stage == null && <Button variant={'primary'} onClick={() => dispatch({type: "STAGE_0"})}>Create Quiz</Button>}
         { stage == 0 && <CreateQuiz /> }
         { stage > 0 && <CreateQuestion /> }
+        <QuizList />
     </div>
   )
 }

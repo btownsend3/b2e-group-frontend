@@ -51,7 +51,6 @@ export function getQuizzes() {
 }
 
 export function createQuiza() {
-    console.log("test")
     return async (dispatch, getState) => {
         try {
             let res = await fetch(`${QUIZ_URL}/create?token=${getState().token}`, {

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import {createStore, applyMiddleware, compose} from "redux"
 import {Provider} from 'react-redux'
-import reducer from './modules/reducer'
+import reducer, {getQuizzes} from './modules/reducer'
 
 const handleAsync = reduxApi => next => action => {
     if (typeof action === 'function') {
@@ -15,6 +15,7 @@ const handleAsync = reduxApi => next => action => {
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
 
 const store = createStore(reducer, composeEnhancers(applyMiddleware(handleAsync)))
+store.dispatch(getQuizzes())
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
