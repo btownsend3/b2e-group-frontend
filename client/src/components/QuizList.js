@@ -22,6 +22,7 @@ function QuizList() {
                 <Card.Text>{quiz.description}</Card.Text>
                 <Card.Text>{quiz.questions.length} questions</Card.Text>
                 {/*<Button variant={'primary'} onClick={() => handleClick(index)}>Take quiz</Button>*/}
+                <AssignQuiz quiz={quiz} />
                 <TakeQuiz quiz={quiz} />
                 <Button variant={'danger'} onClick={() => handleDelete(quiz.id)}>Delete</Button>
             </Card>
