@@ -2,6 +2,7 @@ import {useState} from "react"
 import {Button, Modal} from "react-bootstrap"
 import {useDispatch, useSelector} from "react-redux";
 import {deleteUser, getUsers} from "../modules/reducer";
+import EditUser from "./EditUser";
 
 function ManageAccounts() {
     const dispatch = useDispatch()
@@ -20,10 +21,16 @@ function ManageAccounts() {
 
     const userMap = users?.map((item, index) => {
         return (
-            <div className={'d-flex justify-content-between'}>
-                <p>{item.username}</p>
-                <Button variant={'danger'} onClick={() => handleDelete(item.username)}>Delete</Button>
-            </div>
+            <>
+                <div className={'d-flex justify-content-between'}>
+                    <p>{item.role.toUpperCase()}: {item.username}</p>
+                    <div className={'d-flex justify-content-end'}>
+                        <EditUser user={item} />
+                        <Button className={'mx-2'} variant={'danger'} onClick={() => handleDelete(item.username)}>Delete</Button>
+                    </div>
+                </div>
+                <hr />
+            </>
         )
     })
 

@@ -10,10 +10,10 @@ function TakeQuiz({quiz}) {
 
     const questionMap = quiz.questions?.map((item, index) => {
         return (
-            <>
-                <TakeQuestion key={index} question={item} index={index} />
+            <div key={index}>
+                <TakeQuestion question={item} index={index} />
                 <hr/>
-            </>
+            </div>
         )
         return item
     })

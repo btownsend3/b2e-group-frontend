@@ -43,7 +43,7 @@ function CreateAccount() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal title</Modal.Title>
+                    <Modal.Title>Create new account</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -61,11 +61,11 @@ function CreateAccount() {
                         { permissionLevel === 3 && (
                             <Form.Group>
                                 <Form.Label>Select user level
-                                    <Form.select value={userRole} onChange={(e) => setUserRole(prev => e.target.value)}>
+                                    <Form.Select value={userRole} onChange={(e) => setUserRole(prev => e.target.value)}>
                                         <option value={"applicant"}>Applicant</option>
                                         <option value={"recruiter"}>Recruiter</option>
                                         <option value={"admin"}>Admin</option>
-                                    </Form.select>
+                                    </Form.Select>
                                 </Form.Label>
                             </Form.Group>
                         )}

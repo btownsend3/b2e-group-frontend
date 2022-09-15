@@ -50,6 +50,28 @@ export function deleteUser(username) {
     }
 }
 
+export function editUser(user) {
+    return async (dispatch, getState) => {
+        try {
+            let res = await fetch(`${USER_URL}/edit?token=${getState().token}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            })
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to edit user"})
+            } else {
+                dispatch({type: "EDIT_USER"})
+                dispatch(getUsers())
+            }
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to edit user"})
+        }
+    }
+}
+
 export function getQuizzes() {
     return async (dispatch, getState) => {
         try {
