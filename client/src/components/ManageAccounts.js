@@ -1,10 +1,11 @@
 import {useState} from "react"
 import {Button, Modal} from "react-bootstrap"
 import {useDispatch, useSelector} from "react-redux";
-import {getUsers} from "../modules/reducer";
+import {deleteUser, getUsers} from "../modules/reducer";
 
 function ManageAccounts() {
     const dispatch = useDispatch()
+    const users = useSelector(state => state.userList)
     const [show, setShow] = useState(false)
     const handleClose = () => setShow(false)
 
@@ -12,6 +13,19 @@ function ManageAccounts() {
         setShow(true)
         dispatch(getUsers())
     }
+
+    function handleDelete(username) {
+        dispatch(deleteUser(username))
+    }
+
+    const userMap = users?.map((item, index) => {
+        return (
+            <div className={'d-flex justify-content-between'}>
+                <p>{item.username}</p>
+                <Button variant={'danger'} onClick={() => handleDelete(item.username)}>Delete</Button>
+            </div>
+        )
+    })
 
     return (
         <>
@@ -24,7 +38,7 @@ function ManageAccounts() {
                     <Modal.Title>Manage users</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-
+                    {userMap}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

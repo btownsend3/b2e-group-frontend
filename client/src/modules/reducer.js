@@ -34,6 +34,22 @@ export function getUsers() {
     }
 }
 
+export function deleteUser(username) {
+    return async (dispatch, getState) => {
+        try {
+            let res = await fetch(`${USER_URL}/delete?token=${getState().token}&username=${username}`)
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to delete user " + username})
+            } else {
+                dispatch({type: "DELETE_USER"})
+                dispatch(getUsers())
+            }
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to delete user " + username})
+        }
+    }
+}
+
 export function getQuizzes() {
     return async (dispatch, getState) => {
         try {
