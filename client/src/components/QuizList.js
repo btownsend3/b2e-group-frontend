@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {Button, Card} from "react-bootstrap"
 import {deleteQuiz} from "../modules/reducer";
 import TakeQuiz from "./TakeQuiz";
+import AssignQuiz from "./AssignQuiz";
 
 function QuizList() {
     const dispatch = useDispatch()
