@@ -22,9 +22,14 @@ function NavigationBar() {
                     <Nav className="me-auto">
                         <Nav.Link href="#home">Home</Nav.Link>
                         { !permissionLevel && (
-                            <Nav.Link href="#link">
-                                <Login />
-                            </Nav.Link>
+                            <>
+                                <Nav.Link href="#link">
+                                    <Login />
+                                </Nav.Link>
+                                <Nav.Link href="#link">
+                                    <CreateAccount />
+                                </Nav.Link>
+                            </>
                         )}
                         { permissionLevel > 0 && (
                             <NavDropdown title="Account" id="basic-nav-dropdown">

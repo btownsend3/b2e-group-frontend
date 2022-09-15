@@ -1,10 +1,14 @@
-import {loginHelper} from "./utils";
+import {handleNext, loginHelper} from "./utils";
 
 const USER_URL = "http://localhost:8080"
 const QUIZ_URL = "http://localhost:8081"
 
 const initialState = {
-    currentQuiz: {},
+    currentQuiz: {
+        title: "",
+        description: "",
+        questions: []
+    },
     userList: [],
     quizList: [],
     token: null,
@@ -46,6 +50,28 @@ export function getQuizzes() {
     }
 }
 
+export function createQuiza() {
+    console.log("test")
+    return async (dispatch, getState) => {
+        try {
+            let res = await fetch(`${QUIZ_URL}/create?token=${getState().token}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(getState().currentQuiz)
+            })
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to create quiz"})
+            } else {
+                dispatch({type: "CREATE"})
+            }
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to create quiz"})
+        }
+    }
+}
+
 export function login(username, password) {
     return async (dispatch, getState) => {
         try {
@@ -65,7 +91,7 @@ export function login(username, password) {
 export function logout() {
     return async (dispatch, getState) => {
         try {
-            let res = await fetch(`${USER_URL}/token=${getState().token}`)
+            let res = await fetch(`${USER_URL}/logout/token=${getState().token}`)
             if (!res.ok) {
                 dispatch({type: "FAILED", payload: "Failed to log out"})
             } else {
@@ -116,10 +142,53 @@ export default function reducer(state = initialState, action) {
             return { ...state, currentQuiz: state.quizList[action.payload], stage: 1 }
         case "FAILED":
             return { ...state, errorMessage: action.payload }
-        case "NEXT_STAGE":
+        // case "NEXT_STAGE":
+        //     return {
+        //         ...state,
+        //         stage: state.stage + 1
+        //     }
+        case "STAGE_0":
+            return { ...state, stage: 0 }
+        case "QUESTION":
             return {
                 ...state,
-                stage: state.stage + 1
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    questions: action.payload
+                }
+            }
+        case "QUESTION_TITLE":
+            let newQuestions = [...state.currentQuiz.questions]
+            newQuestions[state.stage - 1] = { ...state.currentQuiz.questions[state.stage - 1], title: action.payload }
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    questions: newQuestions
+                }
+            }
+        case "QUANTITY":
+            return {
+                ...state,
+
+            }
+        case "NEXT":
+            return handleNext(state)
+        case "TITLE":
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    title: action.payload
+                }
+            }
+        case "DESCRIPTION":
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    description: action.payload
+                }
             }
         default:
             return state

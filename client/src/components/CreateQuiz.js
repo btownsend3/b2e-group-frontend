@@ -7,18 +7,28 @@ function CreateQuiz() {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
 
+    function handleTitle(e) {
+        setTitle(prev => e.target.value)
+        dispatch({type: "TITLE", payload: e.target.value})
+    }
+
+    function handleDescription(e) {
+        setDescription(prev => e.target.value)
+        dispatch({type: "DESCRIPTION", payload: e.target.value})
+    }
+
     return (
         <Form>
             <Form.Group>
                 <Form.Label className={'w-100'}>
-                    <Form.Control value={description} onChange={(e) => setTitle(prev => e.target.value)} />
+                    <Form.Control value={title} onChange={handleTitle} />
                 </Form.Label>
             </Form.Group><Form.Group>
                 <Form.Label className={'w-100'}>
-                    <Form.Control value={title} onChange={(e) => setDescription(prev => e.target.value)} />
+                    <Form.Control value={description} onChange={handleDescription} />
                 </Form.Label>
             </Form.Group>
-            <Button variant={"primary"} onClick={() => dispatch({type: "NEXT_STAGE"})}>Next</Button>
+            <Button variant={"primary"} onClick={() => dispatch({type: "NEXT"})}>Next</Button>
         </Form>
     )
 
