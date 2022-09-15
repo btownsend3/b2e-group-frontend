@@ -2,8 +2,7 @@ import {Button, Modal} from "react-bootstrap";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getUsers} from "../modules/reducer";
-import EditUser from "./EditUser";
-import editUser from "./EditUser";
+import editUser from "../modules/reducer";
 
 function AssignQuiz({quiz}) {
     const dispatch = useDispatch()
