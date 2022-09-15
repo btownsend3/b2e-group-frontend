@@ -53,6 +53,7 @@ function CreateQuestion() {
         if (!e.target.value.match("choice")) {
             setOptions(prev => [])
         }
+        dispatch({type: "QUESTION_TYPE", payload: e.target.value})
     }
 
     function handleSubmit() {

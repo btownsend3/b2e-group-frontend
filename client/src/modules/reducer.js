@@ -29,7 +29,7 @@ export function getUsers() {
                 dispatch({type: "GET_USERS", payload: data})
             }
         } catch (e) {
-           dispatch({type: "FAILED", payload: "Failed to fetch users"})
+            dispatch({type: "FAILED", payload: "Failed to fetch users"})
         }
     }
 }
@@ -45,7 +45,7 @@ export function getQuizzes() {
                 dispatch({type: "GET_QUIZZES", payload: data})
             }
         } catch (e) {
-           dispatch({type: "FAILED", payload: "Failed to fetch quizzes"})
+            dispatch({type: "FAILED", payload: "Failed to fetch quizzes"})
         }
     }
 }
@@ -99,7 +99,7 @@ export function login(username, password) {
                 dispatch({type: "LOGIN", payload: data})
             }
         } catch (e) {
-           dispatch({type: "FAILED", payload: "Failed to log in"})
+            dispatch({type: "FAILED", payload: "Failed to log in"})
         }
     }
 }
@@ -121,7 +121,7 @@ export function logout() {
 
 export function createAccount(username, password, role) {
     return async (dispatch, getState) => {
-        let user = { username, password, role }
+        let user = {username, password, role}
         try {
             let res
             if (role != "applicant") {
@@ -143,28 +143,28 @@ export function createAccount(username, password, role) {
 export default function reducer(state = initialState, action) {
     state.errorMessage = null
     state.loginMessage = null
-    switch(action.type) {
+    switch (action.type) {
         case "LOGIN":
             return loginHelper(state, action)
         case "LOGOUT":
-            return { ...state, token: null }
+            return {...state, token: null}
         case "CREATE":
             return state
         case "GET_QUIZZES":
-            return { ...state, quizList: action.payload }
+            return {...state, quizList: action.payload}
         case "GET_USERS":
-            return { ...state, userList: action.payload }
+            return {...state, userList: action.payload}
         case "START_QUIZ":
-            return { ...state, currentQuiz: state.quizList[action.payload], stage: 1 }
+            return {...state, currentQuiz: state.quizList[action.payload], stage: 1}
         case "FAILED":
-            return { ...state, errorMessage: action.payload }
+            return {...state, errorMessage: action.payload}
         // case "NEXT_STAGE":
         //     return {
         //         ...state,
         //         stage: state.stage + 1
         //     }
         case "STAGE_0":
-            return { ...state, stage: 0 }
+            return {...state, stage: 0}
         case "QUESTION":
             return {
                 ...state,
@@ -173,9 +173,9 @@ export default function reducer(state = initialState, action) {
                     questions: action.payload
                 }
             }
-        case "QUESTION_TITLE":
+        case "QUESTION_TYPE": {
             let newQuestions = [...state.currentQuiz.questions]
-            newQuestions[state.stage - 1] = { ...state.currentQuiz.questions[state.stage - 1], title: action.payload }
+            newQuestions[state.stage - 1] = {...state.currentQuiz.questions[state.stage - 1], type: action.payload}
             return {
                 ...state,
                 currentQuiz: {
@@ -183,6 +183,18 @@ export default function reducer(state = initialState, action) {
                     questions: newQuestions
                 }
             }
+        }
+        case "QUESTION_TITLE": {
+            let newQuestions = [...state.currentQuiz.questions]
+            newQuestions[state.stage - 1] = {...state.currentQuiz.questions[state.stage - 1], title: action.payload}
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    questions: newQuestions
+                }
+            }
+        }
         case "QUANTITY":
             return {
                 ...state,

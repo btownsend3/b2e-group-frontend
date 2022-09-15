@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from "react-redux"
 import {Button, Card} from "react-bootstrap"
 import {deleteQuiz} from "../modules/reducer";
+import TakeQuiz from "./TakeQuiz";
 
 function QuizList() {
     const dispatch = useDispatch()
@@ -20,7 +21,8 @@ function QuizList() {
                 <Card.Title>{quiz.title}</Card.Title>
                 <Card.Text>{quiz.description}</Card.Text>
                 <Card.Text>{quiz.questions.length} questions</Card.Text>
-                <Button variant={'primary'} onClick={() => handleClick(index)}>Take quiz</Button>
+                {/*<Button variant={'primary'} onClick={() => handleClick(index)}>Take quiz</Button>*/}
+                <TakeQuiz quiz={quiz} />
                 <Button variant={'danger'} onClick={() => handleDelete(quiz.id)}>Delete</Button>
             </Card>
         )

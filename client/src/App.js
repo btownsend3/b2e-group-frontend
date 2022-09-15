@@ -11,11 +11,12 @@ import QuizList from "./components/QuizList";
 function App() {
     const dispatch = useDispatch()
     const stage = useSelector(state => state.stage)
+    const permissionLevel = useSelector(state => state.permissionLevel)
 
   return (
     <div className="App">
       <NavigationBar />
-        { stage == null && <Button variant={'primary'} onClick={() => dispatch({type: "STAGE_0"})}>Create Quiz</Button>}
+        { stage == null && permissionLevel > 2 && <Button variant={'primary'} onClick={() => dispatch({type: "STAGE_0"})}>Create Quiz</Button>}
         { stage == 0 && <CreateQuiz /> }
         { stage > 0 && <CreateQuestion /> }
         <QuizList />
