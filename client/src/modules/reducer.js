@@ -71,6 +71,23 @@ export function createQuiza() {
     }
 }
 
+export function deleteQuiz(id) {
+    return async (dispatch, getState) => {
+        try {
+            let res = await fetch(`${QUIZ_URL}/delete?id=${id}`)
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to delete quiz"})
+            } else {
+                dispatch({type: "DELETE"})
+                dispatch(getQuizzes())
+            }
+
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to delete quiz"})
+        }
+    }
+}
+
 export function login(username, password) {
     return async (dispatch, getState) => {
         try {
