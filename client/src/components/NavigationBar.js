@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {logout} from "../modules/reducer"
 import CreateAccount from "./CreateAccount"
 import Login from "./Login"
+import ManageAccounts from "./ManageAccounts";
 
 function NavigationBar() {
     const dispatch = useDispatch()
@@ -34,9 +35,11 @@ function NavigationBar() {
                         { permissionLevel > 0 && (
                             <NavDropdown title="Account" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Another action
-                            </NavDropdown.Item>
+                                { permissionLevel > 2 && (
+                                    <NavDropdown.Item href="#action/3.2">
+                                        <ManageAccounts />
+                                    </NavDropdown.Item>
+                                )}
                             { permissionLevel === 3 && (
                                 <NavDropdown.Item href="#action/3.3">
                                     <CreateAccount />
