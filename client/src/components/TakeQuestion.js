@@ -15,7 +15,7 @@ function TakeQuestion({question, index}) {
         case "bool":
             return (
                 <div>
-                    <h6>{question.title}</h6>
+                    <h6>{index + 1}. {question.title}</h6>
                     <Form.Group>
                         <Form.Check value={"true"} label={"true"} onChange={(e) => setBool(e.target.value)} name={question.title} />
                         <Form.Check value={"false"} label={"false"} onChange={(e) => setBool(e.target.value)} name={question.title} />
@@ -25,7 +25,7 @@ function TakeQuestion({question, index}) {
         case "text":
             return (
                 <div>
-                    <h6>{question.title}</h6>
+                    <h6>{index + 1}. {question.title}</h6>
                     <Form.Group>
                         <Form.Control as={'textarea'} onChange={(e) => setText(prev => e.target.value)}/>
                     </Form.Group>
@@ -34,7 +34,7 @@ function TakeQuestion({question, index}) {
         case "choice":
             return (
                 <div>
-                    <h6>{question.title}</h6>
+                    <h6>{index + 1}. {question.title}</h6>
                     <Form.Group>
                         <Form.Check type={'radio'} label={index} onChange={(e) => setChoice(e.target.value)} name={question.title} />
                     </Form.Group>

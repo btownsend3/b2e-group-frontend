@@ -107,7 +107,7 @@ export function login(username, password) {
 export function logout() {
     return async (dispatch, getState) => {
         try {
-            let res = await fetch(`${USER_URL}/logout/token=${getState().token}`)
+            let res = await fetch(`${USER_URL}/logout?token=${getState().token}`)
             if (!res.ok) {
                 dispatch({type: "FAILED", payload: "Failed to log out"})
             } else {
@@ -147,7 +147,7 @@ export default function reducer(state = initialState, action) {
         case "LOGIN":
             return loginHelper(state, action)
         case "LOGOUT":
-            return {...state, token: null}
+            return {...state, token: null, permissionLevel: 0}
         case "CREATE":
             return state
         case "GET_QUIZZES":
