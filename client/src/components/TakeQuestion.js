@@ -1,7 +1,9 @@
 import {Form} from 'react-bootstrap'
-import {useState} from "react"
+import {useEffect, useState} from "react"
+import {useDispatch} from "react-redux";
 
 function TakeQuestion({question, index}) {
+    const dispatch = useDispatch()
     const [text, setText] = useState("")
     const [choice, setChoice] = useState("")
     const [bool, setBool] = useState("")
@@ -11,14 +13,29 @@ function TakeQuestion({question, index}) {
     //
     // }
 
+    useEffect(() => {
+        let obj = {text, question}
+        dispatch({type: "UPDATE_TEXT", payload: obj})
+    }, [text])
+
+    useEffect(() => {
+        let obj = {choice, question}
+        dispatch({type: "UPDATE_CHOICE", payload: obj})
+    }, [choice])
+
+    useEffect(() => {
+        let obj = {bool, question}
+        dispatch({type: "UPDATE_BOOL", payload: obj})
+    }, [bool])
+
     switch(question.type) {
         case "bool":
             return (
                 <div>
                     <h6>{index + 1}. {question.title}</h6>
                     <Form.Group>
-                        <Form.Check value={"true"} label={"true"} onChange={(e) => setBool(e.target.value)} name={question.title} />
-                        <Form.Check value={"false"} label={"false"} onChange={(e) => setBool(e.target.value)} name={question.title} />
+                        <Form.Check type={'radio'} value={"true"} label={"true"} onChange={(e) => setBool(e.target.value)} name={question.title} />
+                        <Form.Check type={'radio'} value={"false"} label={"false"} onChange={(e) => setBool(e.target.value)} name={question.title} />
                     </Form.Group>
                 </div>
             )

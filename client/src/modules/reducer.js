@@ -7,12 +7,17 @@ const initialState = {
     currentQuiz: {
         title: "",
         description: "",
-        questions: []
+        questions: [],
+        responses: []
     },
+    username: null,
+    view: "home",
+    assignmentList: [],
     userList: [],
     quizList: [],
     token: null,
     stage: null,
+    takingQuiz: false,
     permissionLevel: 0, // 0: not logged in / 1: applicant / 2: recruiter / 3: admin
     errorMessage: null,
     loginMessage: null
@@ -88,7 +93,7 @@ export function getQuizzes() {
     }
 }
 
-export function createQuiza() {
+export function createQuiz() {
     return async (dispatch, getState) => {
         try {
             let res = await fetch(`${QUIZ_URL}/create?token=${getState().token}`, {
@@ -105,6 +110,50 @@ export function createQuiza() {
             }
         } catch (e) {
             dispatch({type: "FAILED", payload: "Failed to create quiz"})
+        }
+    }
+}
+
+export function editQuiz() {
+    return async (dispatch, getState) => {
+        try {
+            let res = await fetch(`${QUIZ_URL}/edit?token=${getState().token}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(getState().currentQuiz)
+            })
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to edit quiz"})
+        }
+    }
+}
+
+export function submitQuizResponse(id) {
+    return async (dispatch, getState) => {
+        let responseAnswers = getState().currentQuiz.responses.find(item => item.token === getState().token)
+        delete responseAnswers.token
+        let answerArr = []
+        for (let [key, value] of Object.entries(responseAnswers)) {
+            answerArr.push({[key]: value})
+        }
+        let response = { ...getState().currentQuiz.responses[getState().currentQuiz.responses.length - 1], username: getState().username, answers: answerArr, grade: null }
+        try {
+            let res = await fetch(`${QUIZ_URL}/add-response?id=${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(response)
+            })
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to submit response"})
+            } else {
+                dispatch({type: "SUBMIT_QUIZ_RESPONSE"})
+            }
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to submit response"})
         }
     }
 }
@@ -134,7 +183,7 @@ export function login(username, password) {
             if (!res.ok) {
                 dispatch({type: "FAILED", payload: "Failed to log in with provided username and password"})
             } else {
-                dispatch({type: "LOGIN", payload: data})
+                dispatch({type: "LOGIN", payload: { data, username }})
             }
         } catch (e) {
             dispatch({type: "FAILED", payload: "Failed to log in"})
@@ -159,7 +208,6 @@ export function logout() {
 
 export function createAccount(username, password, role) {
     return async (dispatch, getState) => {
-        let user = {username, password, role}
         try {
             let res
             if (role != "applicant") {
@@ -174,6 +222,21 @@ export function createAccount(username, password, role) {
             }
         } catch (e) {
             dispatch({type: "FAILED", payload: "Failed to create account"})
+        }
+    }
+}
+
+export function submitGrade(id, grade) {
+    return async (dispatch, getState) => {
+        try {
+            let res = await fetch(`${QUIZ_URL}/grade?id=${id}&grade=${grade}`)
+            if (!res.ok) {
+                dispatch({type: "FAILED", payload: "Failed to submit grade"})
+            } else {
+                dispatch({type: "SUBMIT_GRADE"})
+            }
+        } catch (e) {
+            dispatch({type: "FAILED", payload: "Failed to submit grade"})
         }
     }
 }
@@ -193,7 +256,15 @@ export default function reducer(state = initialState, action) {
         case "GET_USERS":
             return {...state, userList: action.payload}
         case "START_QUIZ":
-            return {...state, currentQuiz: state.quizList[action.payload], stage: 1}
+            return {...state, currentQuiz: action.payload, stage: 1, takingQuiz: true}
+        case "SUBMIT_QUIZ_RESPONSE":
+            return { ...state, takingQuiz: false, currentQuiz: {
+                    title: "",
+                    description: "",
+                    questions: [],
+                    responses: []
+                }
+            }
         case "FAILED":
             return {...state, errorMessage: action.payload}
         // case "NEXT_STAGE":
@@ -256,6 +327,65 @@ export default function reducer(state = initialState, action) {
                     description: action.payload
                 }
             }
+        case "UPDATE_TEXT": {
+            let responseCopy = [...state.currentQuiz.responses]
+            let response = state.currentQuiz.responses.find(item => item.token === state.token)
+            if (!response) {
+                responseCopy = [...state.currentQuiz.responses, {token: state.token}]
+            }
+            responseCopy[responseCopy.indexOf(response)] = {
+                ...responseCopy[responseCopy.indexOf(response)],
+                [action.payload.question.title]: action.payload.text
+            }
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    username: state.username,
+                    responses: responseCopy
+                }
+            }
+        }
+        case "UPDATE_CHOICE": {
+            let responseCopy = [...state.currentQuiz.responses]
+            let response = state.currentQuiz.responses.find(item => item.token === state.token)
+            if (!response) {
+                responseCopy = [...state.currentQuiz.responses, {token: state.token}]
+            }
+            responseCopy[responseCopy.indexOf(response)] = {
+                ...responseCopy[responseCopy.indexOf(response)],
+                [action.payload.question.title]: action.payload.choice
+            }
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    username: state.username,
+                    responses: responseCopy
+                }
+            }
+        }
+        case "UPDATE_BOOL": {
+            let responseCopy = [...state.currentQuiz.responses]
+            let response = state.currentQuiz.responses.find(item => item.token === state.token)
+            if (!response) {
+                responseCopy = [...state.currentQuiz.responses, {token: state.token}]
+            }
+            responseCopy[responseCopy.indexOf(response)] = {
+                ...responseCopy[responseCopy.indexOf(response)],
+                [action.payload.question.title]: action.payload.bool
+            }
+            return {
+                ...state,
+                currentQuiz: {
+                    ...state.currentQuiz,
+                    username: state.username,
+                    responses: responseCopy
+                }
+            }
+        }
+        case "VIEW_RESPONSES":
+            return { ...state, view: "response", currentQuiz: action.payload }
         default:
             return state
     }

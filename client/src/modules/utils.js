@@ -2,7 +2,7 @@ import Question from "../components/Question";
 
 export function loginHelper(state, action) {
     let permLvl
-    switch(action.payload.role) {
+    switch(action.payload.data.role) {
         case "applicant": permLvl = 1; break
         case "recruiter": permLvl = 2; break
         case "admin": permLvl = 3; break
@@ -10,8 +10,10 @@ export function loginHelper(state, action) {
     }
     return {
         ...state,
-        token: action.payload.token,
+        username: action.payload.username,
+        token: action.payload.data.token,
         permissionLevel: permLvl,
+        assignmentList: action.payload.data.assignments,
         loginMessage: "You are now logged in"
     }
 }

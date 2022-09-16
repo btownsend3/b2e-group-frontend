@@ -2,11 +2,12 @@ import {useEffect, useState} from "react"
 import {Button, Form} from "react-bootstrap"
 import {useDispatch, useSelector} from "react-redux"
 import Question from "./Question"
-import {createQuiza} from "../modules/reducer";
+import {createQuiz} from "../modules/reducer";
 
 function CreateQuestion() {
     const dispatch = useDispatch()
     const state = useSelector(state => state)
+    const errorMessage = useSelector(state => state.errorMessage)
     const stage = useSelector(state => state.stage)
     const currentQuiz = useSelector(state => state.currentQuiz)
     const questions = useSelector(state => state.currentQuiz.questions)
@@ -27,7 +28,7 @@ function CreateQuestion() {
     // useEffect(() => {
     //     dispatch({type: "OPTION_EDIT", payload: options})
     // }, [options])
-    
+
     useEffect(() => {
         dispatch({type: "QUANTITY", qty})
     }, [qty])
@@ -57,7 +58,7 @@ function CreateQuestion() {
     }
 
     function handleSubmit() {
-        dispatch(createQuiza())
+        dispatch(createQuiz())
     }
 
     function handlePrompt(e) {
@@ -79,7 +80,7 @@ function CreateQuestion() {
         <div>
             <Form>
                 <Form.Group>
-                    <Form.Label>
+                    <Form.Label>Question
                         <Form.Control as={'textarea'} value={prompt} onChange={handlePrompt} />
                     </Form.Label>
                 </Form.Group>
@@ -97,12 +98,13 @@ function CreateQuestion() {
                         </Form.Label>
                     )}
                 </Form.Group>
-                <Form.Group>
-                    <Form.Label>
+                {/*<Form.Group>*/}
+                {/*    <Form.Label>*/}
 
-                    </Form.Label>
-                </Form.Group>
+                {/*    </Form.Label>*/}
+                {/*</Form.Group>*/}
                 { options.length > 0 && optionsMap }
+                { errorMessage && <p>{errorMessage}</p>}
                 <Button onClick={() => dispatch({type: "NEXT"})}>Next</Button>
                 <Button onClick={() => handleSubmit()}>Submit</Button>
             </Form>

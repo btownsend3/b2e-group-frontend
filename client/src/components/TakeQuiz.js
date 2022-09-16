@@ -1,12 +1,23 @@
 import {useState} from "react"
 import {Button, Modal} from "react-bootstrap"
 import TakeQuestion from "./TakeQuestion";
+import {useDispatch} from "react-redux";
+import {submitQuizResponse} from "../modules/reducer";
 
 function TakeQuiz({quiz}) {
+    const dispatch = useDispatch()
     const [show, setShow] = useState(false)
 
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
+
+    function handleShow() {
+        setShow(true)
+        dispatch({type: "START_QUIZ", payload: quiz})
+    }
+
+    function handleSubmit() {
+        dispatch(submitQuizResponse(quiz.id))
+    }
 
     const questionMap = quiz.questions?.map((item, index) => {
         return (
@@ -38,8 +49,8 @@ function TakeQuiz({quiz}) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                    <Button variant="primary" onClick={handleSubmit}>
+                        Submit
                     </Button>
                 </Modal.Footer>
             </Modal>
