@@ -31,7 +31,7 @@ function TakeQuiz({quiz}) {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" style={{width: "fit-content", padding: ".5em"}} onClick={handleShow}>
                 Take this quiz
             </Button>
 

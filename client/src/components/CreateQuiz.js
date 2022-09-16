@@ -1,11 +1,12 @@
 import {useState} from 'react'
-import {Button, Form} from "react-bootstrap"
-import {useDispatch} from "react-redux"
+import {Button, Card, Form} from "react-bootstrap"
+import {useDispatch, useSelector} from "react-redux"
 
 function CreateQuiz() {
     const dispatch = useDispatch()
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
+    const currentQuiz = useSelector(state => state.currentQuiz)
+    const [title, setTitle] = useState(currentQuiz.title ? currentQuiz.title : "")
+    const [description, setDescription] = useState(currentQuiz.description ? currentQuiz.description : "")
 
     function handleTitle(e) {
         setTitle(prev => e.target.value)
@@ -18,17 +19,20 @@ function CreateQuiz() {
     }
 
     return (
-        <Form>
-            <Form.Group>
-                <Form.Label className={'w-100'}>
-                    <Form.Control value={title} onChange={handleTitle} />
-                </Form.Label>
-            </Form.Group><Form.Group>
-                <Form.Label className={'w-100'}>
-                    <Form.Control value={description} onChange={handleDescription} />
-                </Form.Label>
-            </Form.Group>
-            <Button variant={"primary"} onClick={() => dispatch({type: "NEXT"})}>Next</Button>
+        <Form className={'d-flex flex-column justify-content-center w-25 m-auto'}>
+            <Card className={'shadow p-3 m-4 bg-white rounded'}>
+                <Card.Title className={'text-center'}>Create new quiz</Card.Title>
+                <Form.Group>
+                    <Form.Label className={'w-100'}>Title
+                        <Form.Control value={title} onChange={handleTitle} />
+                    </Form.Label>
+                </Form.Group><Form.Group>
+                    <Form.Label className={'w-100'}>Description
+                        <Form.Control value={description} onChange={handleDescription} />
+                    </Form.Label>
+                </Form.Group>
+                <Button style={{width: "fit-content", padding: ".5em"}} variant={"primary"} onClick={() => dispatch({type: "NEXT"})}>Next</Button>
+            </Card>
         </Form>
     )
 

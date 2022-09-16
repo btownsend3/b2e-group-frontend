@@ -250,13 +250,24 @@ export default function reducer(state = initialState, action) {
         case "LOGOUT":
             return {...state, token: null, permissionLevel: 0}
         case "CREATE":
-            return state
+            return { ...state,
+                stage: null,
+                currentQuiz: {
+                    title: "",
+                    description: "",
+                    questions: [],
+                    responses: []
+                },
+                view: "home"
+            }
         case "GET_QUIZZES":
-            return {...state, quizList: action.payload}
+            return { ...state, quizList: action.payload }
         case "GET_USERS":
-            return {...state, userList: action.payload}
+            return { ...state, userList: action.payload }
         case "START_QUIZ":
-            return {...state, currentQuiz: action.payload, stage: 1, takingQuiz: true}
+            return { ...state, currentQuiz: action.payload, stage: 1, takingQuiz: true }
+        case "EDIT_QUIZ":
+            return { ...state, currentQuiz: action.payload, stage: 0, takingQuiz: false }
         case "SUBMIT_QUIZ_RESPONSE":
             return { ...state, takingQuiz: false, currentQuiz: {
                     title: "",
@@ -266,7 +277,7 @@ export default function reducer(state = initialState, action) {
                 }
             }
         case "FAILED":
-            return {...state, errorMessage: action.payload}
+            return { ...state, errorMessage: action.payload }
         // case "NEXT_STAGE":
         //     return {
         //         ...state,

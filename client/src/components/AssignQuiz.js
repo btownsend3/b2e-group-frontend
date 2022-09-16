@@ -34,7 +34,7 @@ function AssignQuiz({quiz}) {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" className={'mx-2'} style={{width: "fit-content", padding: ".5em"}} onClick={handleShow}>
                 Assign quiz
             </Button>
 

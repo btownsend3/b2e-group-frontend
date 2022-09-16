@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux"
 import {Button, Card} from "react-bootstrap"
-import {deleteQuiz} from "../modules/reducer";
+import {deleteQuiz, editQuiz} from "../modules/reducer";
 import TakeQuiz from "./TakeQuiz";
 import AssignQuiz from "./AssignQuiz";
 
@@ -13,6 +13,10 @@ function QuizList() {
         dispatch(deleteQuiz(id))
     }
 
+    function handleEdit(quiz) {
+        dispatch({type: "EDIT_QUIZ", payload: quiz})
+    }
+
     function handleResponses(quiz) {
         dispatch({type: "VIEW_RESPONSES", payload: quiz})
     }
@@ -23,11 +27,16 @@ function QuizList() {
                 <Card.Title>{quiz.title}</Card.Title>
                 <Card.Text>{quiz.description}</Card.Text>
                 <Card.Text>{quiz.questions.length} questions</Card.Text>
-                { permissionLevel > 1 && <AssignQuiz quiz={quiz} /> }
-                { permissionLevel > 0 && <TakeQuiz quiz={quiz} /> }
+                <div className={'d-flex mb-2'}>
+                    { permissionLevel > 0 && <TakeQuiz quiz={quiz} /> }
+                    { permissionLevel > 1 && <AssignQuiz quiz={quiz} /> }
+                </div>
+                <div className={'d-flex'}>
+                    { permissionLevel > 2 && <Button style={{width: "fit-content", padding: ".5em"}} variant={'primary'} onClick={() => handleResponses(quiz)} >Responses</Button> }
+                    { permissionLevel > 2 && <Button className={'mx-2'} style={{width: "fit-content", padding: ".5em"}} variant={'danger'} onClick={() => handleDelete(quiz.id)}>Delete</Button> }
+                    { permissionLevel > 2 && <Button className={'mx-2'} style={{width: "fit-content", padding: ".5em"}} variant={'warning'} onClick={() => handleEdit(quiz)}>Edit</Button> }
+                </div>
                 { permissionLevel === 0 && <p>Please log in to take this quiz</p> }
-                { permissionLevel > 2 && <Button variant={'primary'} onClick={() => handleResponses(quiz)} >Responses</Button> }
-                { permissionLevel > 2 && <Button variant={'danger'} onClick={() => handleDelete(quiz.id)}>Delete</Button> }
             </Card>
         )
     })

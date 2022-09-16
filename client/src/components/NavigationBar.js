@@ -11,13 +11,13 @@ import ManageAccounts from "./ManageAccounts";
 function NavigationBar() {
     const dispatch = useDispatch()
     const permissionLevel = useSelector(state => state.permissionLevel)
-    const stage = useSelector(state => state.stage)
-    const token = useSelector(state => state.token)
+    // const stage = useSelector(state => state.stage)
+    // const token = useSelector(state => state.token)
 
     return (
         <Navbar bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="#home">B2E Group 2</Navbar.Brand>
+                <Navbar.Brand href="#home"><h2>B2E Group 2</h2></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">

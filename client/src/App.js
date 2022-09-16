@@ -24,7 +24,6 @@ function App() {
         { stage > 0 && !takingQuiz && <CreateQuestion /> }
         { permissionLevel > 0 && <AssignmentList /> }
         { view === "response" && <ResponseList /> }
-        { view === "response" && <h1>hello</h1>}
         <QuizList />
     </div>
   )

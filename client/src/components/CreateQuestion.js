@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react"
-import {Button, Form} from "react-bootstrap"
+import {Button, Card, Form} from "react-bootstrap"
 import {useDispatch, useSelector} from "react-redux"
 import Question from "./Question"
-import {createQuiz} from "../modules/reducer";
+import {createQuiz} from "../modules/reducer"
 
 function CreateQuestion() {
     const dispatch = useDispatch()
@@ -24,10 +24,6 @@ function CreateQuestion() {
     useEffect(() => {
         dispatch({type: "QUESTION_TYPE", payload: questionType})
     }, [questionType])
-
-    // useEffect(() => {
-    //     dispatch({type: "OPTION_EDIT", payload: options})
-    // }, [options])
 
     useEffect(() => {
         dispatch({type: "QUANTITY", qty})
@@ -78,35 +74,39 @@ function CreateQuestion() {
 
     return (
         <div>
-            <Form>
-                <Form.Group>
-                    <Form.Label>Question
-                        <Form.Control as={'textarea'} value={prompt} onChange={handlePrompt} />
-                    </Form.Label>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Question type
-                        <Form.Select value={questionType} onChange={handleType}>
-                            <option value={"bool"}>True/false</option>
-                            {/*<option value={"choice"}>Multiple choice</option>*/}
-                            <option value={"text"}>Text</option>
-                        </Form.Select>
-                    </Form.Label>
-                    { questionType.match("choice") && (
-                        <Form.Label>
-                            <Form.Control type={"number"} value={qty} onChange={handleQty} min={3} max={26} />
+            <Form className={'d-flex flex-column justify-content-center w-25 m-auto'}>
+                <Card className={'shadow p-3 m-4 bg-white rounded'}>
+                    <Form.Group>
+                        <Form.Label className={'w-100'}>Question
+                            <Form.Control as={'textarea'} value={prompt} onChange={handlePrompt} />
                         </Form.Label>
-                    )}
-                </Form.Group>
-                {/*<Form.Group>*/}
-                {/*    <Form.Label>*/}
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label className={'w-100'}>Question type
+                            <Form.Select value={questionType} onChange={handleType}>
+                                <option value={"bool"}>True/false</option>
+                                {/*<option value={"choice"}>Multiple choice</option>*/}
+                                <option value={"text"}>Text</option>
+                            </Form.Select>
+                        </Form.Label>
+                        { questionType.match("choice") && (
+                            <Form.Label>
+                                <Form.Control type={"number"} value={qty} onChange={handleQty} min={3} max={26} />
+                            </Form.Label>
+                        )}
+                    </Form.Group>
+                    {/*<Form.Group>*/}
+                    {/*    <Form.Label>*/}
 
-                {/*    </Form.Label>*/}
-                {/*</Form.Group>*/}
-                { options.length > 0 && optionsMap }
-                { errorMessage && <p>{errorMessage}</p>}
-                <Button onClick={() => dispatch({type: "NEXT"})}>Next</Button>
-                <Button onClick={() => handleSubmit()}>Submit</Button>
+                    {/*    </Form.Label>*/}
+                    {/*</Form.Group>*/}
+                    { options.length > 0 && optionsMap }
+                    { errorMessage && <p>{errorMessage}</p>}
+                    <div className={'d-flex'}>
+                        <Button style={{width: "fit-content", padding: ".5em"}} onClick={() => dispatch({type: "NEXT"})}>Next</Button>
+                        <Button className={'mx-2'} style={{width: "fit-content", padding: ".5em"}} onClick={() => handleSubmit()}>Submit</Button>
+                    </div>
+                </Card>
             </Form>
         </div>
     )
