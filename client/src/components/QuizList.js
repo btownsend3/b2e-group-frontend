@@ -6,6 +6,7 @@ import AssignQuiz from "./AssignQuiz";
 
 function QuizList() {
     const dispatch = useDispatch()
+    const permissionLevel = useSelector(state => state.permissionLevel)
     const quizzes = useSelector(state => state.quizList)
 
     function handleClick(index) {
@@ -23,9 +24,10 @@ function QuizList() {
                 <Card.Text>{quiz.description}</Card.Text>
                 <Card.Text>{quiz.questions.length} questions</Card.Text>
                 {/*<Button variant={'primary'} onClick={() => handleClick(index)}>Take quiz</Button>*/}
-                <AssignQuiz quiz={quiz} />
-                <TakeQuiz quiz={quiz} />
-                <Button variant={'danger'} onClick={() => handleDelete(quiz.id)}>Delete</Button>
+                { permissionLevel > 1 && <AssignQuiz quiz={quiz} /> }
+                { permissionLevel > 0 && <TakeQuiz quiz={quiz} /> }
+                { permissionLevel === 0 && <p>Please log in to take this quiz</p> }
+                { permissionLevel > 2 && <Button variant={'danger'} onClick={() => handleDelete(quiz.id)}>Delete</Button> }
             </Card>
         )
     })
