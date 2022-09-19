@@ -11,6 +11,7 @@ import ManageAccounts from "./ManageAccounts";
 function NavigationBar() {
     const dispatch = useDispatch()
     const permissionLevel = useSelector(state => state.permissionLevel)
+    const stage = useSelector(state => state.stage)
     // const stage = useSelector(state => state.stage)
     // const token = useSelector(state => state.token)
 
@@ -32,9 +33,9 @@ function NavigationBar() {
                                 </Nav.Link>
                             </>
                         )}
+                        { stage == null && permissionLevel > 2 && <Nav.Link onClick={() => dispatch({type: "STAGE_0"})}>Create Quiz</Nav.Link>}
                         { permissionLevel > 0 && (
                             <NavDropdown title="Account" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                                 { permissionLevel > 2 && (
                                     <NavDropdown.Item href="#action/3.2">
                                         <ManageAccounts />

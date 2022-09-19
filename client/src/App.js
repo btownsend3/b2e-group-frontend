@@ -19,7 +19,6 @@ function App() {
   return (
     <div className="App">
       <NavigationBar />
-        { stage == null && permissionLevel > 2 && <Button variant={'primary'} onClick={() => dispatch({type: "STAGE_0"})}>Create Quiz</Button>}
         { stage == 0 && !takingQuiz && <CreateQuiz /> }
         { stage > 0 && !takingQuiz && <CreateQuestion /> }
         { permissionLevel > 0 && <AssignmentList /> }
