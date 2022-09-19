@@ -397,6 +397,8 @@ export default function reducer(state = initialState, action) {
         }
         case "VIEW_RESPONSES":
             return { ...state, view: "response", currentQuiz: action.payload }
+        case "HOME":
+            return { ...state, view: "home", stage: null }
         default:
             return state
     }

@@ -21,7 +21,7 @@ function NavigationBar() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
+                        <Nav.Link onClick={() => dispatch({type: "HOME"})} href="#home">Home</Nav.Link>
                         { !permissionLevel && (
                             <>
                                 <Nav.Link href="#link">
