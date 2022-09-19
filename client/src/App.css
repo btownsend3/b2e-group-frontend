@@ -1,1 +1,7 @@
+.assignments-border {
+    border-right: 2px solid black;
+}
 
+.w-45 {
+    width: 45vw;
+}
