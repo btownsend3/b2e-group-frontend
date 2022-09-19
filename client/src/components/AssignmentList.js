@@ -5,15 +5,21 @@ import TakeQuiz from "./TakeQuiz"
 function AssignmentList() {
     const dispatch = useDispatch()
     const permissionLevel = useSelector(state => state.permissionLevel)
+    const allQuizzes = useSelector(state => state.quizList)
     const quizzes = useSelector(state => state.assignmentList)
+    const username = useSelector(state => state.username)
+
+
 
     const quizMap = quizzes?.map((quiz, index) => {
+        let grade = allQuizzes.find(item => item.id == quiz.id).responses.find(item => item.username == username).grade
         return (
             <Card key={index} className={'shadow p-3 m-4 bg-white rounded'} style={{width: "18rem"}}>
                 <Card.Title>{quiz.title}</Card.Title>
                 <Card.Text>{quiz.description}</Card.Text>
                 <Card.Text>{quiz.questions.length} questions</Card.Text>
-                {permissionLevel > 0 && <TakeQuiz quiz={quiz}/>}
+                { grade && <Card.Text>Grade: {grade}/{quiz.questions.length}</Card.Text> }
+                { !grade && permissionLevel > 0 && <TakeQuiz quiz={quiz}/>}
             </Card>
         )
     })
