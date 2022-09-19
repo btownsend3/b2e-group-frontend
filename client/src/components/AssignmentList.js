@@ -12,7 +12,7 @@ function AssignmentList() {
 
 
     const quizMap = quizzes?.map((quiz, index) => {
-        let grade = allQuizzes.find(item => item.id == quiz.id).responses.find(item => item.username == username).grade
+        let grade = allQuizzes?.find(item => item.id == quiz.id)?.responses?.find(item => item.username == username)?.grade
         if (!grade) {
             return (
                 <Card key={index} className={'shadow p-3 m-4 bg-white rounded'} style={{width: "18rem"}}>
@@ -26,7 +26,7 @@ function AssignmentList() {
     })
 
     const gradedQuizMap = quizzes?.map((quiz, index) => {
-        let grade = allQuizzes.find(item => item.id == quiz.id).responses.find(item => item.username == username).grade
+        let grade = allQuizzes?.find(item => item.id == quiz.id)?.responses?.find(item => item.username == username)?.grade
         if (grade) {
             return (
                 <Card key={index} className={'shadow p-3 m-4 bg-white rounded'} style={{width: "18rem"}}>
